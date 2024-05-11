@@ -8,5 +8,5 @@ A different take on a to-do list.
 - Fold a note to favorite it
 - Hover over a task to mark it complete individually
 
-Go stick a note
+### Go stick a note
 https://sticky-notes-react-js.vercel.app/
