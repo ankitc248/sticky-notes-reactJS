@@ -1,3 +1,16 @@
+:root {
+  --body-black-color:#222222;
+  --dark-black-color:#111111;
+  --light-black-color:#333333;
+  --yellow-color:#FED500;
+  --white-font-color:#ccc;
+  --pink-color:#FF7EB9;
+  --blue-color:#7AFCFF;
+  --green-color:#46C45A;
+}
+*{
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,7 +18,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--body-black-color);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  color: var(--white-font-color);
 }
+/* .blue-print-pattern,body{
+  background-image: linear-gradient(rgba(255,255,255,0.03) 2px, transparent 2px),
+  linear-gradient(90deg, rgba(255,255,255,0.03) 2px, transparent 1px),
+  linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+  } */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
