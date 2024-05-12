@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap');
 
 .App{
-  min-height: 85%;
+  min-height: 80%;
 }
 
 .app-container {
@@ -15,7 +15,18 @@
   flex-direction: column;
   padding-bottom: 10rem;
 }
+.empty-notes{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  color: #888;
+}
+.empty-notes button{
+  background-color: transparent;
 
+}
 button {
   cursor: pointer;
   background-color: var(--dark-black-color);
@@ -643,7 +654,11 @@ textarea:focus {
   .note-editor .note-inputs{
     width: 100%;
     gap:1.5rem;
-    padding-block: 1rem;
+  }
+  .note-editor-title-text{
+    font-weight: 400;
+    font-size: 20px;
+    padding: 1rem;
   }
   .note-editor .note-editor-footer{
     display: block;

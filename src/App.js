@@ -42,7 +42,9 @@ export default function App() {
     data.lastModifiedDateTime = new Date();
     setNotePopup(false);
     if (data.type === "deleted")
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== data.id));
+      setNotes((prevNotes) => [
+        ...prevNotes.filter((note) => note.id !== data.id),
+      ]);
     if (notes.some((note) => note.id === data.id)) {
       let tempNotes = [...notes];
       tempNotes = tempNotes.map((note) => (note.id === data.id ? data : note));
@@ -62,14 +64,13 @@ export default function App() {
       setOrganizedNotes({
         pending: notes.filter((note) => note.type === "pending"),
         completed: notes.filter((note) => note.type === "completed"),
-        archived: notes.filter((note) => note.type === "archived"),
+        archived: notes.filter((note) => note.type === "archived")
       });
   }, [notes]);
 
   useEffect(() => {
     localStorage.setItem("config", JSON.stringify(config));
   }, [config]);
-
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -138,6 +139,23 @@ export default function App() {
             </motion.button>
           </div>
         </div>
+        {(Object.keys(organizedNotes).length && !organizedNotes.pending.length && !organizedNotes.completed.length && !organizedNotes.archived.length) ? (
+          <div className="empty-notes">No notes added yet
+          <p>
+            <motion.button
+              whileHover={{ scale: 1.025 }}
+              whileTap={{ scale: 0.975 }}
+              type="button"
+              className="add-note-button"
+              onClick={() => {
+                setPopupValues({});
+                setNotePopup(true);
+              }}
+            >
+              <span className="button-icon">&#x2b;</span>
+              <span className="button-text"> Stick one now</span>
+            </motion.button></p></div>
+        ):null}
         {Object.keys(organizedNotes).length ? (
           <div className="notes-sections">
             {organizedNotes.pending.length ? (
@@ -240,19 +258,10 @@ const Note = ({ values, onEditClick, onUpdate }) => {
 
   useEffect(() => {
     values.color = noteColor;
-  }, [values, noteColor]);
-
-  useEffect(() => {
     values.folded = folded;
-  }, [values, folded]);
-
-  useEffect(() => {
     values.textStatus = textStatus;
-  }, [values, textStatus]);
-
-  useEffect(() => {
     values.type = noteType;
-  }, [values, noteType]);
+  }, [values, noteColor, folded, textStatus, noteType]);
 
   return (
     <motion.div
@@ -317,7 +326,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onUpdate(values);
             }}
           >
-            <span className="button-icon">&#x2B6F;</span>
+            <span className="button-icon">&#11119;</span>
             <span className="button-tooltip">Mark pending</span>
           </button>
           <button

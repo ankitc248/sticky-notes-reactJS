@@ -10,3 +10,7 @@ A different take on a to-do list.
 
 ### Go stick a note
 https://sticky-notes-react-js.vercel.app/
+
+
+#### Icons used
+<a href="https://www.flaticon.com/free-icons/sticky-note" title="sticky note icons">Sticky note icons created by Andrean Prabowo - Flaticon</a>

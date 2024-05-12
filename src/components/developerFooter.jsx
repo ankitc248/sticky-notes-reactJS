@@ -21,11 +21,7 @@ export default function DeveloperFooter() {
   ];
 
   const quoteWords = ["care","love","passion","dedication"];
-  const [quoteWord, setQuoteWord] = useState('care');
-
-  useEffect(() => {
-    setQuoteWord(quoteWords[Math.floor(Math.random()*quoteWords.length)]);
-  },[quoteWords]);
+  const quoteWord = quoteWords[Math.floor(Math.random() * quoteWords.length)];
 
   return (
     <div className="developer-footer">
@@ -38,6 +34,7 @@ export default function DeveloperFooter() {
             className={`link ${developerLink.linkName}-link`}
             target="_blank"
             rel="noreferrer"
+            key={developerLink.linkName}
           >
             <span className="link-icon">
               <img src={developerLink.icon} alt={developerLink.linkName} />
