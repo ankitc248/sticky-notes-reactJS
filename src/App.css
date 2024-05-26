@@ -668,4 +668,7 @@ textarea:focus {
   .note-editor .note-preview{
     display: none;
   }
+  .note-controls button{
+    height: 44px;
+  }
 }
