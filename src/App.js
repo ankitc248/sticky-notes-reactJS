@@ -100,7 +100,7 @@ export default function App() {
                 });
               }}
             >
-              <span className="button-icon">&#x270D;</span>
+              <span className="button-icon"><img src="assets/note-icons/icon-of-a-hand-holding-a-pencil.svg" alt='handwritten' className="icon svg"/></span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -112,7 +112,7 @@ export default function App() {
                 setConfig({ ...config, foldedDisplay: !config.foldedDisplay });
               }}
             >
-              &#x25E5;
+              <img src="assets/note-icons/page-with-corner-folded.svg" alt='folded' className="icon svg"/>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -122,7 +122,7 @@ export default function App() {
                 setConfig({ ...config, listDisplay: !config.listDisplay });
               }}
             >
-              &#x25A4;
+              <img src="assets/note-icons/burger-simple.svg" alt='stretch' className="icon svg"/>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.025 }}
@@ -315,7 +315,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onEditClick();
             }}
           >
-            <span className="button-icon">&#x270E;</span>
+            <span className="button-icon"><img src="assets/note-icons/edit-2.svg" className="icon svg" alt="edit"/></span>
             <span className="button-tooltip">Edit</span>
           </button>
           <button
@@ -326,7 +326,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onUpdate(values);
             }}
           >
-            <span className="button-icon">&#11119;</span>
+            <span className="button-icon"><img src="assets/note-icons/undo.svg" className="icon svg" alt="undo"/></span>
             <span className="button-tooltip">Mark pending</span>
           </button>
           <button
@@ -337,7 +337,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onUpdate(values);
             }}
           >
-            <span className="button-icon">&#10006;</span>
+            <span className="button-icon"><img src="assets/note-icons/delete-1.svg" className="icon svg" alt="delete"/></span>
             <span className="button-tooltip">Delete</span>
           </button>
           <button
@@ -348,7 +348,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onUpdate(values);
             }}
           >
-            <span className="button-icon">&#10006;</span>
+            <span className="button-icon"><img src="assets/note-icons/archive.svg" className="icon svg" alt="archive"/></span>
             <span className="button-tooltip">Archive</span>
           </button>
           <button
@@ -359,7 +359,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onUpdate(values);
             }}
           >
-            <span className="button-icon">&#x2714;</span>
+            <span className="button-icon"><img src="assets/note-icons/check.svg" className="icon svg" alt="complete"/></span>
             <span className="button-tooltip">Mark complete</span>
           </button>
         </div>
