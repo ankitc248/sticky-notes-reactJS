@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import "../css/developerFooter.css";
 
 export default function DeveloperFooter() {

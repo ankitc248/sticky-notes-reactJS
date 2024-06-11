@@ -7,7 +7,6 @@
 .app-container {
   width: 95dvw;
   max-width: 90dvw;
-  /* background-color: var(--dark-black-color); */
   height: 100%;
   display: flex;
   align-items: center;
@@ -75,63 +74,65 @@ button {
   border: solid 2px var(--light-black-color);
   overflow: hidden;
   color: var(--yellow-color);
-}
 
-.add-note-button .button-text {
-  flex: 1;
-  padding: 0 2rem;
-}
+  .button-text {
+    flex: 1;
+    padding: 0 2rem;
+  }
 
-.add-note-button:hover {
-  border: solid 2px var(--dark-black-color) !important;
-  background-color: var(--yellow-color) !important;
-  color: black !important;
-  font-weight: 600;
-}
+  &:hover {
+    border: solid 2px var(--dark-black-color) !important;
+    background-color: var(--yellow-color) !important;
+    color: black !important;
+    font-weight: 600;
+  }
 
-.add-note-button:hover .button-icon {
-  background-color: var(--yellow-color) !important;
-  color: black;
-  font-weight: 600;
-  border-right: solid 2px var(--dark-black-color);
-}
+  &:hover .button-icon {
+    background-color: var(--yellow-color) !important;
+    color: black;
+    font-weight: 600;
+    border-right: solid 2px var(--dark-black-color);
+  }
 
-.add-note-button .button-icon {
-  font-size: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-right: solid 2px var(--light-black-color);
-  width: 60px;
-  height: 40px;
-  transition: all 0.1s ease;
-  padding-bottom: 4px;
+  .button-icon {
+    font-size: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-right: solid 2px var(--light-black-color);
+    width: 60px;
+    height: 40px;
+    transition: all 0.1s ease;
+    padding-bottom: 4px;
+  }
+
 }
 
 .universal-controls {
   display: flex;
   gap: 1rem;
-}
 
-.universal-controls button {
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border: solid 2px transparent;
-}
+  button {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: solid 2px transparent;
+  }
 
-.universal-controls button:hover {
-  border: solid 2px var(--yellow-color);
-  /* background-color: var(--yellow-color) !important; */
-  /* color: black; */
-}
+  button:hover {
+    border: solid 2px var(--yellow-color);
+    /* background-color: var(--yellow-color) !important; */
+    /* color: black; */
+  }
 
-.universal-controls button.active {
-  border: solid 2px rgba(255, 255, 0, 0.5);
-  background-color: var(--yellow-color) !important;
-  color: black;
-}
+  button.active {
+    border: solid 2px rgba(255, 255, 0, 0.5);
+    background-color: var(--yellow-color) !important;
+    color: black;
+  }
 
-.universal-controls button.active .icon{
-  filter: invert(0);
+  button.active .icon {
+    filter: invert(0);
+  }
+
 }
 
 .handwritten-toggle.active .button-icon,
@@ -184,17 +185,6 @@ button {
   gap: 2rem;
 }
 
-.list .notes-container {
-  grid-template-columns: 1fr !important;
-}
-
-.list .note {
-  max-width: none !important;
-}
-
-.list .note-tasks {
-  flex-direction: row !important;
-}
 
 .note {
   position: relative;
@@ -210,26 +200,101 @@ button {
   height: fit-content;
 }
 
-.not-handwritten .note {
-  font-family: inherit;
-  font-size: 16px;
+.note .note-footer.for-horizontal {
+  display: none;
 }
 
-.not-handwritten .note-body {
-  font-size: 16px !important;
+.note .note-body {
+  position: relative;
 }
 
-.not-handwritten .note-title {
-  font-size: 18px !important;
+.list {
+  .notes-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .note-tasks {
+    flex-direction: row !important;
+  }
+
+  .note-editor .note {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .note {
+    max-width: none !important;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 8px;
+
+    .note-fold {
+      /* display: none !important; */
+      background: white;
+      background: linear-gradient(45deg, rgba(255, 255, 0, 1) 0%, rgba(255, 255, 0, 1) 50%, var(--dark-black-color) 50%, var(--dark-black-color) 100%);
+    }
+
+    .note.folded .note-fold:hover {
+      opacity: 1;
+      /* background: linear-gradient(45deg, var(--yellow-color) 0%, var(--yellow-color) 50%, var(--yellow-color) 50%, var(--yellow-color) 100%); */
+      box-shadow: none;
+    }
+
+    .note-body {
+      flex: 1;
+      word-break: break-all;
+    }
+
+    .note-footer {
+      overflow: visible;
+      border-radius: 0;
+    }
+
+    .note-footer .note-colors {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100%;
+      padding: 8px;
+      display: none;
+    }
+
+    .note-footer.for-horizontal,
+    .note-footer.for-horizontal .note-colors {
+      display: flex;
+    }
+
+    .note-footer .note-controls {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100%;
+    }
+
+  }
+
 }
 
-.not-handwritten .button-tooltip {
-  font-size: 16px !important;
+.not-handwritten {
+  .note {
+    font-family: inherit;
+    font-size: 16px;
+  }
+
+  .not-handwritten .note-body {
+    font-size: 16px !important;
+  }
+
+  .not-handwritten .note-title {
+    font-size: 18px !important;
+  }
+
+  .not-handwritten .button-tooltip {
+    font-size: 16px !important;
+  }
 }
 
 .note-fold {
   position: absolute;
   right: 0;
+  top: 0;
   border-radius: 0;
   width: 40px;
   aspect-ratio: 1;
@@ -251,6 +316,7 @@ button {
 .note.folded .note-fold:hover {
   opacity: 1;
   background: linear-gradient(45deg, black 0%, black 50%, var(--body-black-color) 50%, var(--body-black-color) 100%);
+  box-shadow: none;
 }
 
 .note-body * {
@@ -356,53 +422,54 @@ button {
 
 .note-controls {
   display: flex;
-}
 
-.note-controls button {
-  background-color: transparent;
-  position: relative;
-  border-radius: 0;
-  font-size: 16px;
-  padding: 0.25rem 1.25rem;
-  height: 32px;
-  aspect-ratio: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
+  button {
+    background-color: transparent;
+    position: relative;
+    border-radius: 0;
+    font-size: 16px;
+    padding: 0.25rem 1.25rem;
+    height: 32px;
+    aspect-ratio: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
 
-.note-controls button .button-tooltip {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  width: max-content;
-  left: 0;
-  translate: -95% 0;
-  height: 100%;
-  display: none;
-  background-color: white;
-  padding: 0 1rem;
-  font-weight: normal !important;
-  pointer-events: none;
-}
+  button .button-tooltip {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    width: max-content;
+    left: 0;
+    translate: -95% 0;
+    height: 100%;
+    display: none;
+    background-color: white;
+    padding: 0 1rem;
+    font-weight: normal !important;
+    pointer-events: none;
+    z-index: 5;
+  }
 
-.note-controls button:hover .button-tooltip,
-.note-controls button:focus .button-tooltip {
-  display: flex;
-}
+  button:hover .button-tooltip,
+  button:focus .button-tooltip {
+    display: flex;
+  }
 
-.note-controls button:hover,
-.note-controls button:focus {
-  background-color: white;
-  color: var(--dark-black-color);
-  outline: none;
-}
+  button:hover,
+  button:focus {
+    background-color: white;
+    color: var(--dark-black-color);
+    outline: none;
+  }
 
-.note-controls button:hover .icon.svg {
-  filter: invert(0);
+  button:hover .icon.svg {
+    filter: invert(0);
+  }
 }
 
 .pending .note-control-undo,
@@ -422,7 +489,8 @@ button {
   display: none;
 }
 
-.completed .note-tasks {
+.completed .note-tasks,
+.completed .note-title {
   text-decoration: line-through !important;
   pointer-events: none
 }
@@ -554,7 +622,6 @@ textarea:focus {
 
 .note-editor-body .note-body {
   pointer-events: none;
-  height: 100%;
 }
 
 .note-editor-background {
@@ -698,6 +765,7 @@ textarea:focus {
     width: 100%;
     border-radius: 0;
     height: 100dvh;
+    border: none;
   }
 
   .note-editor-title .note-editor-controls {
@@ -727,5 +795,10 @@ textarea:focus {
 
   .note-controls button {
     height: 44px;
+  }
+
+  .developer-footer {
+    justify-content: center;
+    padding-bottom: 5rem;
   }
 }

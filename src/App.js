@@ -266,10 +266,26 @@ const Note = ({ values, onEditClick, onUpdate }) => {
   return (
     <motion.div
       className={`note ${noteColor} ${folded ? "folded" : ""}`}
-      initial={{ scale: 1.2, opacity: 0 }}
+      initial={{ scale: 1.1, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: "spring", duration: 0.5, ease: "easeInOut" }}
     >
+      <div className="note-footer for-horizontal">
+        <div className="note-colors">
+          {noteColors.map((color) => (
+            <button
+              key={color}
+              type="button"
+              className={`note-color ${color}`}
+              onClick={() => {
+                setNoteColor(color);
+                onUpdate(values);
+              }}
+            ></button>
+          ))}
+        </div>
+        </div>
+      <div className="note-body">
       <button
         className="note-fold"
         onClick={() => {
@@ -277,7 +293,6 @@ const Note = ({ values, onEditClick, onUpdate }) => {
           onUpdate(values);
         }}
       ></button>
-      <div className="note-body">
         <p className="note-title">{values.title}</p>
         <ul className="note-tasks">
           {values.text.map((text, index) => (
@@ -315,7 +330,7 @@ const Note = ({ values, onEditClick, onUpdate }) => {
               onEditClick();
             }}
           >
-            <span className="button-icon"><img src="assets/note-icons/edit-2.svg" className="icon svg" alt="edit"/></span>
+            <span className="button-icon"><img src="assets/note-icons/edit-2.svg" className="icon svg" alt="edit" style={{maxWidth: "18px"}}/></span>
             <span className="button-tooltip">Edit</span>
           </button>
           <button
