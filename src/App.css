@@ -354,11 +354,6 @@ button {
   content: "- ";
 }
 
-.note-tasks li:hover {
-  /* text-decoration: line-through; */
-  background-color: rgba(0, 0, 0, 1);
-  color: white;
-}
 
 .note-tasks li.done {
   text-decoration: line-through;
@@ -367,11 +362,20 @@ button {
 .note-task {
   width: fit-content;
   transition: all 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 0 0 0px transparent;
 }
 
+.note-task:hover {
+  /* text-decoration: line-through; */
+  background-color: var(--dark-black-color);
+  color: white;
+  box-shadow: 0 0 0 6px var(--dark-black-color);
+}
 .note-task.done:hover {
   background-color: rgba(255, 255, 255, 1);
   color: black;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 1);
 }
 
 .note-footer {
