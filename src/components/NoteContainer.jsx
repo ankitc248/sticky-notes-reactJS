@@ -1,12 +1,20 @@
 import { Note } from "./Note";
+import { useDroppable } from "@dnd-kit/core";
 export const NoteContainer = ({
+  type,
   notes,
   setPopupValues,
   setNotePopup,
-  handleNoteSave,
+  handleNoteSave
 }) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: `${type}-note-container`,
+  });
   return (
-    <div className="notes-container">
+    <div
+      className="notes-container"
+      ref={setNodeRef}
+    >
       {notes.map((note) => (
         <Note
           key={note.id}

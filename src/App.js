@@ -5,15 +5,11 @@ import { NoteEditor } from "./components/NoteEditor";
 import { NoteSection } from "./components/NoteSection";
 import { UniversalControls } from "./components/UniversalControls";
 import { EmptyIndicator } from "./components/EmptyIndicator";
+import { arrayMove } from "@dnd-kit/sortable";
 
 export default function App() {
   const [notePopup, setNotePopup] = useState(false);
   const [popupValues, setPopupValues] = useState({});
-  const [organizedNotes, setOrganizedNotes] = useState({
-    pending: [],
-    completed: [],
-    archived: [],
-  });
   const helpNote = {
     id: uuidv4(),
     title: "Sticky note features",
@@ -61,6 +57,11 @@ export default function App() {
     if (storedNotes) setNotes(JSON.parse(storedNotes));
   }, []);
 
+  const [organizedNotes, setOrganizedNotes] = useState({
+    pending: notes.filter((note) => note.type === "pending"),
+    completed: notes.filter((note) => note.type === "completed"),
+    archived: notes.filter((note) => note.type === "archived"),
+  });
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
     notes.length &&
@@ -75,6 +76,17 @@ export default function App() {
     localStorage.setItem("config", JSON.stringify(config));
   }, [config]);
 
+  const handleNoteReorder = (data) => {
+    const oldIndex = notes.findIndex((note) => {
+      return note.id === data[0];
+    });
+    const newIndex = notes.findIndex((note) => {
+      return note.id === data[1];
+    });
+    if (oldIndex === -1 || newIndex === -1) return;
+    let newNotes = arrayMove(notes, oldIndex, newIndex);
+    setNotes(newNotes);
+  };
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -95,8 +107,7 @@ export default function App() {
           setNotePopup={setNotePopup}
           setPopupValues={setPopupValues}
         />
-        {Object.keys(organizedNotes).length &&
-        !organizedNotes.pending.length &&
+        {!organizedNotes.pending.length &&
         !organizedNotes.completed.length &&
         !organizedNotes.archived.length ? (
           <EmptyIndicator
@@ -108,6 +119,7 @@ export default function App() {
           <div className="notes-sections">
             {organizedNotes.pending.length ? (
               <NoteSection
+                onNoteReorder={handleNoteReorder}
                 type="pending"
                 notes={organizedNotes.pending}
                 setPopupValues={setPopupValues}
@@ -117,6 +129,7 @@ export default function App() {
             ) : null}
             {organizedNotes.completed.length ? (
               <NoteSection
+                onNoteReorder={handleNoteReorder}
                 type="completed"
                 notes={organizedNotes.completed}
                 setPopupValues={setPopupValues}
@@ -126,6 +139,7 @@ export default function App() {
             ) : null}
             {organizedNotes.archived.length ? (
               <NoteSection
+                onNoteReorder={handleNoteReorder}
                 type="archived"
                 notes={organizedNotes.archived}
                 setPopupValues={setPopupValues}

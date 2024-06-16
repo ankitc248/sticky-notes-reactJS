@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import { Note } from "./Note";
@@ -108,6 +108,7 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
           <div className="note-inputs">
             <div className="note-title-input-container">
               <input
+                autoFocus
                 type="text"
                 placeholder="Note title"
                 className="note-title-input"
