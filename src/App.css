@@ -163,7 +163,7 @@ button {
   width: 100%;
 }
 
-.notes-section.dragging .note {
+.notes-sections:has(.dragging) .note {
   pointer-events: none;
 }
 

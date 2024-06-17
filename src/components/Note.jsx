@@ -30,6 +30,7 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
   } = useSortable({
     id: values.id,
   });
+  console.log(transition);
   const style = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
@@ -41,7 +42,9 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
   return (
     <div
       style={style}
-      className={`note ${noteColor} ${folded ? "folded" : ""} ${isDragging ? "dragged" : ""}`}
+      className={`note ${noteColor} ${folded ? "folded" : ""} ${
+        isDragging ? "dragged" : ""
+      }`}
       ref={setNodeRef}
     >
       <div className="note-footer for-horizontal">
@@ -105,91 +108,50 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
           ))}
         </div>
         <div className="note-controls">
-          <button
-            type="button"
-            className="note-control note-control-edit"
+          <NoteControlButton
+            type="edit"
+            iconName="edit-2"
+            tooltip="Edit"
             onClick={() => {
               onEditClick();
             }}
-          >
-            <span className="button-icon">
-              <img
-                src="assets/note-icons/edit-2.svg"
-                className="icon svg"
-                alt="edit"
-                style={{ maxWidth: "18px" }}
-              />
-            </span>
-            <span className="button-tooltip">Edit</span>
-          </button>
-          <button
-            type="button"
-            className="note-control note-control-undo"
+          />
+          <NoteControlButton
+            type="undo"
+            iconName="undo"
+            tooltip="Mark Pending"
             onClick={() => {
               setNoteType("pending");
               onUpdate(values);
             }}
-          >
-            <span className="button-icon">
-              <img
-                src="assets/note-icons/undo.svg"
-                className="icon svg"
-                alt="undo"
-              />
-            </span>
-            <span className="button-tooltip">Mark pending</span>
-          </button>
-          <button
-            type="button"
-            className="note-control note-control-delete"
+          />
+          <NoteControlButton
+            type="delete"
+            iconName="delete-1"
+            tooltip="Delete"
             onClick={() => {
               setNoteType("deleted");
               onUpdate(values);
             }}
-          >
-            <span className="button-icon">
-              <img
-                src="assets/note-icons/delete-1.svg"
-                className="icon svg"
-                alt="delete"
-              />
-            </span>
-            <span className="button-tooltip">Delete</span>
-          </button>
-          <button
-            type="button"
-            className="note-control note-control-archive"
+          />
+          <NoteControlButton
+            type="archive"
+            iconName="archive"
+            tooltip="Archive"
             onClick={() => {
               setNoteType("archived");
               onUpdate(values);
             }}
-          >
-            <span className="button-icon">
-              <img
-                src="assets/note-icons/archive.svg"
-                className="icon svg"
-                alt="archive"
-              />
-            </span>
-            <span className="button-tooltip">Archive</span>
-          </button>
-          <button
-            type="button"
-            className="note-control note-control-complete"
+          />
+          <NoteControlButton
+            type="complete"
+            iconName="check"
+            tooltip="Mark complete"
             onClick={() => {
               setNoteType("completed");
               onUpdate(values);
             }}
-          >
-            <span className="button-icon">
-              <img
-                src="assets/note-icons/check.svg"
-                className="icon svg"
-                alt="complete"
-              />
-            </span>
-            <span className="button-tooltip">Mark complete</span>
-          </button>
+          />
         </div>
       </div>
     </div>
@@ -205,12 +167,12 @@ const NoteControlButton = ({ type, onClick, iconName, tooltip }) => {
     >
       <span className="button-icon">
         <img
-          src={`assets/note-icons/${type}.svg`}
+          src={`assets/note-icons/${iconName}.svg`}
           className="icon svg"
           alt={type}
         />
       </span>
-      <span className="button-tooltip">{type}</span>
+      <span className="button-tooltip">{tooltip}</span>
     </button>
   );
 };
