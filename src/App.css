@@ -206,6 +206,7 @@ button {
   box-shadow: 4px -4px 4px var(--body-black-color), 0px 8px 16px rgba(0, 0, 0, 0.5);
   border-radius: 0 0 8px 8px;
   height: fit-content;
+  touch-action: none;
   /* animation: note-initial-animation 0.25s ease-in; */
 }
 
@@ -238,6 +239,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: none;
 }
 
 .drag-handle:hover img {

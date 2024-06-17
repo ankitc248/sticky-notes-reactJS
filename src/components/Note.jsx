@@ -30,7 +30,6 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
   } = useSortable({
     id: values.id,
   });
-  console.log(transition);
   const style = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
