@@ -48,8 +48,10 @@ export default function App() {
       let tempNotes = [...notes];
       tempNotes = tempNotes.map((note) => (note.id === data.id ? data : note));
       setNotes(tempNotes);
-    } else setNotes((prevNotes) => [...prevNotes, data]);
-    setConfig((prevConfig) => ({ ...prevConfig, foldedDisplay: false }));
+    } else {
+      if (config.foldedDisplay) data.folded = true;
+      setNotes((prevNotes) => [...prevNotes, data]);
+    }
   };
 
   useEffect(() => {

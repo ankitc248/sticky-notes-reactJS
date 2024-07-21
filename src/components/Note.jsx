@@ -75,7 +75,8 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
             <li
               className={`note-task ${textStatus[index] ? "done" : ""}`}
               key={index}
-              onClick={() => {
+              onClick={(event) => {
+                // prettyStrikethrough(event.target);
                 handleTextStatusUpdate(index);
               }}
             >
@@ -174,4 +175,115 @@ const NoteControlButton = ({ type, onClick, iconName, tooltip }) => {
       <span className="button-tooltip">{tooltip}</span>
     </button>
   );
+};
+
+//IN DEVELOPMENT
+const prettyStrikethrough = (element) => {
+  const strikeDelay = 0.25;
+  let container = element;
+  function countLines(element) {
+    let divHeight = element.offsetHeight;
+    let divWidth = element.offsetWidth;
+    const styles = window.getComputedStyle(element);
+    let lineHeight = parseInt(styles.lineHeight);
+    let padding = parseInt(styles.padding);
+    let fontSize = parseInt(styles.fontSize);
+    let lines = Math.floor((divHeight - padding * 2) / lineHeight);
+    let linesText = calcLines(element, lines);
+    let linesInfo = {
+      lines: lines,
+      fontSize: fontSize,
+      lineHeight: lineHeight,
+      padding: padding,
+      width: divWidth,
+      linesText: linesText,
+    };
+    return linesInfo;
+  }
+
+  let linesInfo = countLines(container);
+  if (container.classList.contains("done")) {
+    console.log("HERE");
+    if(container.querySelector(".old-text")) container.innerText = container.querySelector(".old-text").innerText;
+    return;
+  }
+  let oldTextElement = document.createElement("span");
+  oldTextElement.classList.add("old-text");
+  oldTextElement.innerText = container.innerText;
+  container.innerText = "";
+  container.appendChild(oldTextElement);
+  for (let i = 0; i < linesInfo.lines; i++) {
+    let strikeElement = "";
+    let eachLineElement = "";
+    let delay = i * strikeDelay;
+    eachLineElement = document.createElement("span");
+    eachLineElement.classList.add("each-line");
+    strikeElement = document.createElement("span");
+    strikeElement.classList.add("striking-line");
+    strikeElement.style.animationDelay = delay + "s";
+    strikeElement.style.backgroundColor = "#111";
+    eachLineElement.innerText = linesInfo.linesText[i];
+    eachLineElement.appendChild(strikeElement);
+    container.appendChild(eachLineElement);
+  }
+
+  function calcLines(element, noOfLines) {
+    let allText = element.innerText.trim();
+    let chars = getCharsPerLine(element);
+    let calc = noOfLines * chars - allText.length;
+    for (let i = 0; i < calc; i++) allText += " ";
+
+    const words = allText.split(/\s+/);
+
+    let lines = [];
+    let currentLine = [];
+    let currentLength = 0;
+    const targetLength = Math.ceil(allText.length / noOfLines);
+
+    for (let word of words) {
+      if (
+        currentLength + word.length + (currentLine.length > 0 ? 1 : 0) >
+          targetLength &&
+        lines.length < noOfLines - 1
+      ) {
+        lines.push(currentLine.join(" "));
+        currentLine = [];
+        currentLength = 0;
+      }
+
+      currentLine.push(word);
+      currentLength += word.length + (currentLine.length > 1 ? 1 : 0);
+    }
+
+    if (currentLine.length > 0) {
+      lines.push(currentLine.join(" "));
+    }
+
+    while (lines.length < noOfLines) {
+      lines.push("");
+    }
+    return lines;
+  }
+
+  function getCharsPerLine(element) {
+    const styles = window.getComputedStyle(element);
+    let padding = parseInt(styles.padding);
+    let target_width = element.offsetWidth - padding * 2;
+    let text = element.innerText;
+    let span = document.createElement("span");
+    document.body.appendChild(span);
+    span.style.whiteSpace = "nowrap";
+    span.style.fontFamily = styles.fontFamily;
+    span.style.fontSize = styles.fontSize;
+    let fit = text.length;
+    for (let i = 0; i < fit; ++i) {
+      span.innerHTML += text[i];
+      if (span.clientWidth > target_width) {
+        fit = i - 1;
+        break;
+      }
+    }
+    span.remove();
+    return fit;
+  }
 };

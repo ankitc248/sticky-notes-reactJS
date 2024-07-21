@@ -408,7 +408,6 @@ button {
   content: "- ";
 }
 
-
 .note-tasks li.done {
   text-decoration: line-through;
 }
@@ -418,6 +417,7 @@ button {
   transition: all 0.15s ease;
   cursor: pointer;
   box-shadow: 0 0 0 0px transparent;
+  line-height: 1.5rem;
 }
 
 .note-task:hover {
@@ -796,6 +796,43 @@ textarea:focus {
 
 .icon.svg {
   filter: invert(1);
+}
+
+.striking-line {
+  position: absolute;
+  display: block;
+  height: 1px;
+  overflow: hidden;
+  width: 0%;
+  top: 0px;
+  animation: strike 0.1s linear forwards;
+}
+
+@keyframes strike {
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.note .old-text {
+  display: none;
+}
+
+.each-line {
+  display: block;
+  width: max-content;
+  position: relative;
+}
+
+.each-line .striking-line {
+  top: 50%;
+  left: 0px;
+  height: 1.5px;
+  border-radius: 9px;
 }
 
 
