@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { NoteContainer } from "./NoteContainer";
 import { useState } from "react";
+import PropTypes from "prop-types";
 import {
   DndContext,
   closestCenter,
@@ -22,14 +23,17 @@ export const NoteSection = ({
   setNotePopup,
   handleNoteSave,
   onNoteReorder,
+  config,
 }) => {
   const handleDragEnd = (event) => {
     setIsDragging(false);
     setActiveId(null);
     const { active, over } = event;
-    if (active.id !== over.id) {
-      onNoteReorder([active.id, over.id]);
-    }
+    try {
+      if (active.id !== over.id) {
+        onNoteReorder([active.id, over.id]);
+      }
+    } catch (e) {return;}
   };
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -71,9 +75,20 @@ export const NoteSection = ({
             setPopupValues={setPopupValues}
             setNotePopup={setNotePopup}
             handleNoteSave={handleNoteSave}
+            config={config}
           />
         </SortableContext>
       </DndContext>
     </div>
   );
+};
+
+NoteSection.propTypes = {
+  notes: PropTypes.array,
+  type: PropTypes.string,
+  setPopupValues: PropTypes.func,
+  setNotePopup: PropTypes.func,
+  handleNoteSave: PropTypes.func,
+  onNoteReorder: PropTypes.func,
+  config: PropTypes.object,
 };

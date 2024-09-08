@@ -1,24 +1,30 @@
 import { useState, useEffect } from "react";
 import { useSortable } from "@dnd-kit/sortable";
+import PropTypes from "prop-types";
 export const Note = ({ values, onEditClick, onUpdate }) => {
   const [noteColor, setNoteColor] = useState(values.color);
   const [folded, setFolded] = useState(values.folded);
   const [textStatus, setTextStatus] = useState(values.textStatus);
   const [noteType, setNoteType] = useState(values.type);
   const noteColors = ["yellow", "green", "blue", "pink"];
+
   const handleTextStatusUpdate = (index) => {
-    let tempTextStatus = textStatus;
+    let tempTextStatus = values.textStatus;
     tempTextStatus[index] = !tempTextStatus[index];
     setTextStatus(tempTextStatus);
+    values.textStatus = tempTextStatus;
     onUpdate(values);
   };
 
   useEffect(() => {
     values.color = noteColor;
-    values.folded = folded;
-    values.textStatus = textStatus;
     values.type = noteType;
-  }, [values, noteColor, folded, textStatus, noteType]);
+    values.folded = folded;
+  }, [noteColor,folded,noteType,values]);
+
+  useEffect(() => {
+    values.textStatus = textStatus;
+  }, [textStatus]);
 
   const {
     attributes,
@@ -38,6 +44,7 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
     zIndex: isDragging ? "100" : "auto",
     opacity: isDragging ? 0.75 : 1,
   };
+  
   return (
     <div
       style={style}
@@ -72,15 +79,16 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
         <p className="note-title">{values.title}</p>
         <ul className="note-tasks">
           {values.text.map((text, index) => (
-            <li
-              className={`note-task ${textStatus[index] ? "done" : ""}`}
-              key={index}
-              onClick={(event) => {
-                // prettyStrikethrough(event.target);
-                handleTextStatusUpdate(index);
-              }}
-            >
-              {text}
+            <li key={index + text}>
+              <button
+                type="button"
+                className={`note-task ${values.textStatus.length && values.textStatus[index] ? "done" : ""}`}
+                onClick={() => {
+                  handleTextStatusUpdate(index);
+                }}
+              >
+                {text}
+              </button>
             </li>
           ))}
         </ul>
@@ -157,6 +165,11 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
     </div>
   );
 };
+Note.propTypes = {
+  values: PropTypes.object,
+  onUpdate: PropTypes.func,
+  onEditClick: PropTypes.func,
+};
 
 const NoteControlButton = ({ type, onClick, iconName, tooltip }) => {
   return (
@@ -203,8 +216,8 @@ const prettyStrikethrough = (element) => {
 
   let linesInfo = countLines(container);
   if (container.classList.contains("done")) {
-    console.log("HERE");
-    if(container.querySelector(".old-text")) container.innerText = container.querySelector(".old-text").innerText;
+    if (container.querySelector(".old-text"))
+      container.innerText = container.querySelector(".old-text").innerText;
     return;
   }
   let oldTextElement = document.createElement("span");

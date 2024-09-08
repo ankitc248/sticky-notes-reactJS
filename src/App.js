@@ -1,7 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { NoteEditor } from "./components/NoteEditor";
+import { NoteEditor } from "./components/NoteEditor/NoteEditor";
 import { NoteSection } from "./components/NoteSection";
 import { UniversalControls } from "./components/UniversalControls";
 import { EmptyIndicator } from "./components/EmptyIndicator";
@@ -15,7 +15,7 @@ export default function App() {
     title: "Sticky note features",
     text: [
       "You can add upto 5 points to a single sticky note",
-      "Available in 4 colors",
+      "Drag and drop from bottom to change position of notes",
       "Has a 200 character limit",
       "Fold a note to favorite it",
       "Hover over a task to mark it complete individually",
@@ -46,11 +46,24 @@ export default function App() {
       ]);
     if (notes.some((note) => note.id === data.id)) {
       let tempNotes = [...notes];
-      tempNotes = tempNotes.map((note) => (note.id === data.id ? data : note));
+      tempNotes = tempNotes.map((note) =>
+        note.id === data.id ? data : note
+      );
       setNotes(tempNotes);
     } else {
       if (config.foldedDisplay) data.folded = true;
       setNotes((prevNotes) => [...prevNotes, data]);
+
+      // Scroll to the last added note
+      setTimeout(() => {
+        const noteType = data.type;
+        const lastNote = document.querySelector(
+          `.notes-section.${noteType} .note:last-child`
+        );
+        if (lastNote) {
+          lastNote.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+      }, 0);
     }
   };
 
@@ -64,6 +77,7 @@ export default function App() {
     completed: notes.filter((note) => note.type === "completed"),
     archived: notes.filter((note) => note.type === "archived"),
   });
+
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
     notes.length &&
@@ -89,6 +103,7 @@ export default function App() {
     let newNotes = arrayMove(notes, oldIndex, newIndex);
     setNotes(newNotes);
   };
+
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -127,6 +142,7 @@ export default function App() {
                 setPopupValues={setPopupValues}
                 setNotePopup={setNotePopup}
                 handleNoteSave={handleNoteSave}
+                config={config}
               />
             ) : null}
             {organizedNotes.completed.length ? (
@@ -137,6 +153,7 @@ export default function App() {
                 setPopupValues={setPopupValues}
                 setNotePopup={setNotePopup}
                 handleNoteSave={handleNoteSave}
+                config={config}
               />
             ) : null}
             {organizedNotes.archived.length ? (
@@ -147,6 +164,7 @@ export default function App() {
                 setPopupValues={setPopupValues}
                 setNotePopup={setNotePopup}
                 handleNoteSave={handleNoteSave}
+                config={config}
               />
             ) : null}
           </div>

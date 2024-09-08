@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import PropTypes from "prop-types";
+
 export const EmptyIndicator = ({ setPopupValues, setNotePopup }) => {
   return (
     <div className="empty-notes">
@@ -20,4 +22,9 @@ export const EmptyIndicator = ({ setPopupValues, setNotePopup }) => {
       </p>
     </div>
   );
+};
+
+EmptyIndicator.propTypes = {
+  setPopupValues: PropTypes.func,
+  setNotePopup: PropTypes.func,
 };

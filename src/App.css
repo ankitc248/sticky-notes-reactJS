@@ -332,6 +332,10 @@ button {
     font-size: 16px;
   }
 
+  .note-tasks {
+    gap: 0.5rem;
+  }
+
   .not-handwritten .note-body {
     font-size: 16px !important;
   }
@@ -341,6 +345,14 @@ button {
   }
 
   .not-handwritten .button-tooltip {
+    font-size: 16px !important;
+  }
+
+  .note-task {
+    font-size: 16px;
+  }
+
+  .button-tooltip {
     font-size: 16px !important;
   }
 }
@@ -404,20 +416,31 @@ button {
   list-style: none;
 }
 
-.note-tasks li::before {
+.note-tasks .note-task::before {
   content: "- ";
 }
 
-.note-tasks li.done {
+.note-tasks .note-task.done {
   text-decoration: line-through;
 }
+
+.note-tasks .note-task.done::before {
+  content: "✓";
+}
+
 
 .note-task {
   width: fit-content;
   transition: all 0.15s ease;
-  cursor: pointer;
+  padding: 0;
   box-shadow: 0 0 0 0px transparent;
+  background-color: transparent;
+  color: #222;
+  font-size: inherit;
   line-height: 1.5rem;
+  text-align: left;
+  border-radius: 0;
+  word-break: break-word;
 }
 
 .note-task:hover {
@@ -899,6 +922,14 @@ textarea:focus {
 
 @media screen and (max-width: 700px) {
   .note-editor .note-preview {
+    display: none;
+  }
+
+  .note {
+    max-width: none;
+  }
+
+  .list-toggle {
     display: none;
   }
 

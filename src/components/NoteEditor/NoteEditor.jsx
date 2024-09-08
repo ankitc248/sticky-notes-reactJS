@@ -1,25 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
-import { Note } from "./Note";
+import { Note } from "../Note";
+import { NoteInputs } from "./NoteInputs";
+import { NoteEditorFooter } from "./NoteEditorFooter";
+const maxCharacters = 200;
+const maxLines = 5;
+
 export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
-  const maxCharacters = 200;
-  const maxLines = 5;
   const [noteID] = useState(values.id || uuidv4());
   const [noteTitle, setNoteTitle] = useState(values.title || "");
   const [noteText, setNoteText] = useState(values.text || []);
   const [noteColor, setNoteColor] = useState(values.color || "yellow");
   const [textStatus, setTextStatus] = useState(values.textStatus || []);
   const [createdDateTime] = useState(values.createdDateTime || new Date());
-  const [lastModifiedDateTime, setLastModifiedDateTime] = useState(
-    values.lastModifiedDateTime || new Date()
-  );
+  const lastModifiedDateTime = values.lastModifiedDateTime || new Date();
   const [characterLeft, setCharacterLeft] = useState(() => {
     if (Object.keys(values).length)
       return maxCharacters - values.text.join("\n").length;
     return maxCharacters;
   });
-  let noteProperties = {
+
+  const noteProperties = {
     id: noteID,
     title: noteTitle,
     text: noteText,
@@ -30,8 +33,10 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
     createdDateTime: createdDateTime,
     lastModifiedDateTime: lastModifiedDateTime,
   };
+
   const handleNoteUpdate = (data) => {
     setNoteColor(data.color);
+    setTextStatus(data.textStatus);
   };
 
   const handleKeyInput = (e) => {
@@ -54,15 +59,35 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
         const lines = inputText.split("\n");
         setNoteText(lines);
       } else {
-        if (inputText !== "") setNoteText([inputText]);
+        setNoteText([inputText]);
       }
     }
     setCharacterLeft(maxCharacters - e.target.value.length);
   };
 
+  const remapTextStatus = useCallback(() => {
+    let oldTasksThatAreDone = [];
+    if (values.textStatus !== undefined) {
+      values.textStatus.forEach((status, index) => {
+        if (status) oldTasksThatAreDone.push(values.text[index]);
+      });
+    }
+    let newTextStatus = [];
+    noteText.forEach((task) => {
+      if (oldTasksThatAreDone.includes(task)) newTextStatus.push(true);
+      else newTextStatus.push(false);
+    });
+    return newTextStatus;
+  }, [noteText, values.textStatus, values.text]);
+
   useEffect(() => {
-    setTextStatus(Array(noteText.length).fill(false));
-  }, [noteText]);
+    if (!Object.keys(values).length)
+      setTextStatus(Array(noteText.length).fill(false));
+    else {
+      let newTextStatus = remapTextStatus();
+      setTextStatus(newTextStatus);
+    }
+  }, [noteText, values, remapTextStatus]);
 
   return (
     <div
@@ -70,7 +95,12 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
         Object.keys(values).length ? "editing" : "new"
       }`}
     >
-      <div className="note-editor-background" onClick={onCloseClick}></div>
+      <div
+        className="note-editor-background"
+        onClick={onCloseClick}
+        role="button"
+        tabIndex={0}
+      ></div>
       <motion.div
         className="note-editor"
         initial={{ y: -50, opacity: 0 }}
@@ -93,10 +123,8 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
               type="button"
               className="note-editor-save"
               onClick={
-                noteText.length && noteTitle
-                  ? () => {
-                      onSaveClick(noteProperties);
-                    }
+                noteText.length && noteTitle.length
+                  ? () => onSaveClick(noteProperties)
                   : null
               }
             >
@@ -105,32 +133,13 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
           </div>
         </div>
         <div className="note-editor-body">
-          <div className="note-inputs">
-            <div className="note-title-input-container">
-              <input
-                autoFocus
-                type="text"
-                placeholder="Note title"
-                className="note-title-input"
-                onChange={(e) => setNoteTitle(e.target.value)}
-                value={noteProperties.title}
-              />
-            </div>
-            <div className="note-text-input-container">
-              <span
-                className={`character-count ${!characterLeft ? "red" : ""}`}
-              >
-                {characterLeft}
-              </span>
-              <textarea
-                className="note-textarea"
-                placeholder="Fill the note with points and details"
-                onChange={handleTextInput}
-                onKeyDown={handleKeyInput}
-                value={noteProperties.text.join("\n")}
-              ></textarea>
-            </div>
-          </div>
+          <NoteInputs
+            noteProperties={noteProperties}
+            characterLeft={characterLeft}
+            setNoteTitle={setNoteTitle}
+            handleKeyInput={handleKeyInput}
+            handleTextInput={handleTextInput}
+          />
           <div className="note-preview">
             <Note
               key={noteProperties.id}
@@ -139,35 +148,21 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
             />
           </div>
         </div>
-        <div className="note-editor-footer">
-          <div className="footer-buttons">
-            <motion.button
-              type="button"
-              className="note-editor-close"
-              onClick={onCloseClick}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1 }}
-            >
-              Cancel
-            </motion.button>
-            <motion.button
-              type="button"
-              className="note-editor-save"
-              onClick={
-                noteText.length && noteTitle
-                  ? () => {
-                      onSaveClick(noteProperties);
-                    }
-                  : null
-              }
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1 }}
-            >
-              {!Object.keys(values).length ? "+ Stick note" : "Save changes"}
-            </motion.button>
-          </div>
-        </div>
+        <NoteEditorFooter
+          onSaveClick={onSaveClick}
+          onCloseClick={onCloseClick}
+          noteText={noteText}
+          noteTitle={noteTitle}
+          values={values}
+          noteProperties={noteProperties}
+        />
       </motion.div>
     </div>
   );
+};
+
+NoteEditor.propTypes = {
+  values: PropTypes.object,
+  onSaveClick: PropTypes.func,
+  onCloseClick: PropTypes.func,
 };

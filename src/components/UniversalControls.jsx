@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import PropTypes from "prop-types";
+
 export const UniversalControls = ({
   config,
   setConfig,
@@ -73,4 +75,11 @@ export const UniversalControls = ({
       </div>
     </div>
   );
+};
+
+UniversalControls.propTypes = {
+  config: PropTypes.object,
+  setConfig: PropTypes.func,
+  setPopupValues: PropTypes.func,
+  setNotePopup: PropTypes.func,
 };
