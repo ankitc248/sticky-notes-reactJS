@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { NoteEditor } from "./components/NoteEditor/NoteEditor";
 import { NoteSection } from "./components/NoteSection";
@@ -7,23 +7,24 @@ import { UniversalControls } from "./components/UniversalControls";
 import { EmptyIndicator } from "./components/EmptyIndicator";
 import { arrayMove } from "@dnd-kit/sortable";
 
+const helpNote = {
+  id: uuidv4(),
+  title: "Sticky note features",
+  text: [
+    "You can add upto 5 points to a single sticky note",
+    "Drag and drop from bottom to change position of notes",
+    "Has a 200 character limit",
+    "Fold a note to favorite it",
+    "Hover over a task to mark it complete individually",
+  ],
+  textStatus: [false, false, false, false, false],
+  color: "yellow",
+  type: "pending",
+};
+
 export default function App() {
   const [notePopup, setNotePopup] = useState(false);
   const [popupValues, setPopupValues] = useState({});
-  const helpNote = {
-    id: uuidv4(),
-    title: "Sticky note features",
-    text: [
-      "You can add upto 5 points to a single sticky note",
-      "Drag and drop from bottom to change position of notes",
-      "Has a 200 character limit",
-      "Fold a note to favorite it",
-      "Hover over a task to mark it complete individually",
-    ],
-    textStatus: [false, false, false, false, false],
-    color: "yellow",
-    type: "pending",
-  };
 
   const [config, setConfig] = useState(() => {
     if (localStorage.getItem("config"))
@@ -37,35 +38,38 @@ export default function App() {
     return [helpNote];
   });
 
-  const handleNoteSave = (data) => {
-    data.lastModifiedDateTime = new Date();
-    setNotePopup(false);
-    if (data.type === "deleted")
-      setNotes((prevNotes) => [
-        ...prevNotes.filter((note) => note.id !== data.id),
-      ]);
-    if (notes.some((note) => note.id === data.id)) {
-      let tempNotes = [...notes];
-      tempNotes = tempNotes.map((note) =>
-        note.id === data.id ? data : note
-      );
-      setNotes(tempNotes);
-    } else {
-      if (config.foldedDisplay) data.folded = true;
-      setNotes((prevNotes) => [...prevNotes, data]);
-
-      // Scroll to the last added note
-      setTimeout(() => {
-        const noteType = data.type;
-        const lastNote = document.querySelector(
-          `.notes-section.${noteType} .note:last-child`
+  const handleNoteSave = useCallback(
+    (data) => {
+      data.lastModifiedDateTime = new Date();
+      setNotePopup(false);
+      if (data.type === "deleted")
+        setNotes((prevNotes) => [
+          ...prevNotes.filter((note) => note.id !== data.id),
+        ]);
+      if (notes.some((note) => note.id === data.id)) {
+        let tempNotes = [...notes];
+        tempNotes = tempNotes.map((note) =>
+          note.id === data.id ? data : note
         );
-        if (lastNote) {
-          lastNote.scrollIntoView({ behavior: "smooth", block: "end" });
-        }
-      }, 0);
-    }
-  };
+        setNotes(tempNotes);
+      } else {
+        if (config.foldedDisplay) data.folded = true;
+        setNotes((prevNotes) => [...prevNotes, data]);
+
+        // Scroll to the last added note
+        setTimeout(() => {
+          const noteType = data.type;
+          const lastNote = document.querySelector(
+            `.notes-section.${noteType} .note:last-child`
+          );
+          if (lastNote) {
+            lastNote.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+        }, 0);
+      }
+    },
+    [notes, config]
+  );
 
   useEffect(() => {
     const storedNotes = localStorage.getItem("notes");
@@ -92,17 +96,20 @@ export default function App() {
     localStorage.setItem("config", JSON.stringify(config));
   }, [config]);
 
-  const handleNoteReorder = (data) => {
-    const oldIndex = notes.findIndex((note) => {
-      return note.id === data[0];
-    });
-    const newIndex = notes.findIndex((note) => {
-      return note.id === data[1];
-    });
-    if (oldIndex === -1 || newIndex === -1) return;
-    let newNotes = arrayMove(notes, oldIndex, newIndex);
-    setNotes(newNotes);
-  };
+  const handleNoteReorder = useCallback(
+    (data) => {
+      const oldIndex = notes.findIndex((note) => {
+        return note.id === data[0];
+      });
+      const newIndex = notes.findIndex((note) => {
+        return note.id === data[1];
+      });
+      if (oldIndex === -1 || newIndex === -1) return;
+      let newNotes = arrayMove(notes, oldIndex, newIndex);
+      setNotes(newNotes);
+    },
+    [notes]
+  );
 
   return (
     <div
