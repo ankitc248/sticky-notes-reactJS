@@ -511,7 +511,7 @@ button {
     position: relative;
     border-radius: 0;
     font-size: 16px;
-    padding: 0.25rem 1.25rem;
+    padding: 0.25rem 0.75rem;
     height: 32px;
     aspect-ratio: 1;
     display: inline-flex;
@@ -935,6 +935,7 @@ textarea:focus {
 
   .note-controls button {
     height: 44px;
+    padding-inline: 1rem;
   }
 
   .developer-footer {
@@ -960,6 +961,7 @@ textarea:focus {
   transform: translateY(-100%);
   transition: transform 0.25s ease;
 }
-.connection-status.offline{
+
+.connection-status.offline {
   transform: translateY(0);
 }
