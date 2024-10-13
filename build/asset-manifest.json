@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.4fe390b7.css",
-    "main.js": "/static/js/main.c95a3429.js",
+    "main.css": "/static/css/main.11223bc8.css",
+    "main.js": "/static/js/main.e995dfdd.js",
     "static/js/453.404b1055.chunk.js": "/static/js/453.404b1055.chunk.js",
+    "static/media/Manrope-Variable.woff2": "/static/media/Manrope-Variable.dfab7504790c080e7bf1.woff2",
+    "static/media/gochi-hand.woff2": "/static/media/gochi-hand.f8a78ae51a5e0345e1fe.woff2",
     "index.html": "/index.html",
-    "main.4fe390b7.css.map": "/static/css/main.4fe390b7.css.map",
-    "main.c95a3429.js.map": "/static/js/main.c95a3429.js.map",
+    "main.11223bc8.css.map": "/static/css/main.11223bc8.css.map",
+    "main.e995dfdd.js.map": "/static/js/main.e995dfdd.js.map",
     "453.404b1055.chunk.js.map": "/static/js/453.404b1055.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4fe390b7.css",
-    "static/js/main.c95a3429.js"
+    "static/css/main.11223bc8.css",
+    "static/js/main.e995dfdd.js"
   ]
 }

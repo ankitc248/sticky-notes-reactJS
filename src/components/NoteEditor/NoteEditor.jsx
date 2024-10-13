@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { Note } from "../Note";
 import { NoteInputs } from "./NoteInputs";
 import { NoteEditorFooter } from "./NoteEditorFooter";
-const maxCharacters = 200;
-const maxLines = 5;
+export const maxCharacters = 200;
+export const maxLines = 5;
 
 export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
   const [noteID] = useState(values.id || uuidv4());
@@ -40,10 +40,19 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
   };
 
   const handleKeyInput = (e) => {
-    if (!characterLeft) {
+    if (!characterLeft || noteText.length === maxLines) {
       if (e.key !== "Backspace") e.preventDefault();
     }
     if (e.key === "Enter") {
+      const inputText = e.target.value;
+      const newLineIndex = inputText.indexOf("\n");
+      if (inputText.trim() === "") e.preventDefault();
+      if (newLineIndex >= 0) {
+        const lines = inputText.split("\n");
+        if (lines[lines.length - 1] === "") {
+          e.preventDefault();
+        }
+      }
       if (noteText.length === maxLines) {
         e.preventDefault();
       }

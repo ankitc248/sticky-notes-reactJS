@@ -1,16 +1,18 @@
 :root {
-  --body-black-color:#222222;
-  --dark-black-color:#111111;
-  --light-black-color:#333333;
-  --yellow-color:#FED500;
-  --white-font-color:#ccc;
-  --pink-color:#FF7EB9;
-  --blue-color:#7AFCFF;
-  --green-color:#46C45A;
+  --body-black-color: #222222;
+  --dark-black-color: #111111;
+  --light-black-color: #333333;
+  --yellow-color: #FED500;
+  --white-font-color: #ccc;
+  --pink-color: #FF7EB9;
+  --blue-color: #7AFCFF;
+  --green-color: #46C45A;
 }
-*{
+
+* {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -24,6 +26,7 @@ body {
   justify-content: center;
   color: var(--white-font-color);
 }
+
 /* .blue-print-pattern,body{
   background-image: linear-gradient(rgba(255,255,255,0.03) 2px, transparent 2px),
   linear-gradient(90deg, rgba(255,255,255,0.03) 2px, transparent 1px),

@@ -20,7 +20,7 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
     values.color = noteColor;
     values.type = noteType;
     values.folded = folded;
-  }, [noteColor,folded,noteType,values]);
+  }, [noteColor, folded, noteType, values]);
 
   useEffect(() => {
     values.textStatus = textStatus;
@@ -44,7 +44,7 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
     zIndex: isDragging ? "100" : "auto",
     opacity: isDragging ? 0.75 : 1,
   };
-  
+
   return (
     <div
       style={style}
@@ -78,19 +78,24 @@ export const Note = ({ values, onEditClick, onUpdate }) => {
         ></button>
         <p className="note-title">{values.title}</p>
         <ul className="note-tasks">
-          {values.text.map((text, index) => (
-            <li key={index + text}>
-              <button
-                type="button"
-                className={`note-task ${values.textStatus.length && values.textStatus[index] ? "done" : ""}`}
-                onClick={() => {
-                  handleTextStatusUpdate(index);
-                }}
-              >
-                {text}
-              </button>
-            </li>
-          ))}
+          {values.text.map((text, index) => {
+            if (index < 5) {
+              return (
+                <li key={index + text}>
+                  <button
+                    type="button"
+                    className={`note-task ${values.textStatus.length && values.textStatus[index] ? "done" : ""}`}
+                    onClick={() => {
+                      handleTextStatusUpdate(index);
+                    }}
+                  >
+                    {text}
+                  </button>
+                </li>
+              );
+            }
+            return null;
+          })}
         </ul>
       </div>
       <div className="note-footer">

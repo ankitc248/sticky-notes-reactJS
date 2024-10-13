@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { maxLines } from "./NoteEditor";
 export const NoteInputs = ({
   noteProperties,
   characterLeft,
@@ -19,16 +20,40 @@ export const NoteInputs = ({
         />
       </div>
       <div className="note-text-input-container">
-        <span className={`character-count ${!characterLeft ? "red" : ""}`}>
-          {characterLeft}
-        </span>
         <textarea
           className="note-textarea"
-          placeholder="Fill the note with points and details"
+          placeholder="Fill the note with upto 5 tasks"
           onChange={handleTextInput}
           onKeyDown={handleKeyInput}
           value={noteProperties.text.join("\n")}
         ></textarea>
+        <div className="task-input-indicators">
+          <span
+            className={
+              "task-count-label " +
+              (maxLines - noteProperties.text.length <= 0 ? " red" : "")
+            }
+          >
+            <img
+              src="assets/note-icons/list-ul.svg"
+              width={28}
+              height={28}
+              alt="tasks left"
+              className="svg icon"
+            />
+            {maxLines - noteProperties.text.length}
+          </span>
+          <span className={`character-count ${!characterLeft ? "red" : ""}`}>
+            <img
+              src="assets/note-icons/textformat-abc.svg"
+              width={28}
+              height={28}
+              alt="character left"
+              className="svg icon"
+            />
+            {characterLeft}
+          </span>
+        </div>
       </div>
     </div>
   );
