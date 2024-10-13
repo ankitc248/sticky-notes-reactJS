@@ -40,7 +40,7 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
   };
 
   const handleKeyInput = (e) => {
-    if (!characterLeft || noteText.length === maxLines) {
+    if (!characterLeft || noteText.length >= maxLines + 1) {
       if (e.key !== "Backspace") e.preventDefault();
     }
     if (e.key === "Enter") {
@@ -53,7 +53,7 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
           e.preventDefault();
         }
       }
-      if (noteText.length === maxLines) {
+      if (noteText.length >= maxLines) {
         e.preventDefault();
       }
     }

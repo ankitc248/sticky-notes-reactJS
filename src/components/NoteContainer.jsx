@@ -14,6 +14,15 @@ export const NoteContainer = ({
   });
   return (
     <div className="notes-container" ref={setNodeRef}>
+      {notes.filter((note) => !(!note.folded && config.foldedDisplay))
+        .length === 0 && (
+        <div className="empty-folded-notes">
+          <span className="heading">No folded notes</span>
+          <span className="description">
+            You can fold a note from the top right corner
+          </span>
+        </div>
+      )}
       {notes
         .filter((note) => !(!note.folded && config.foldedDisplay))
         .map((note) => (
@@ -38,4 +47,4 @@ NoteContainer.propTypes = {
   setNotePopup: PropTypes.func.isRequired,
   handleNoteSave: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-}
+};

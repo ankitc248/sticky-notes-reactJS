@@ -443,7 +443,8 @@ button {
 }
 
 .note-tasks .note-task::before {
-  content: "- ";
+  content: "-";
+  text-decoration: none !important;
 }
 
 .note-tasks .note-task.done {
@@ -452,6 +453,7 @@ button {
 
 .note-tasks .note-task.done::before {
   content: "✓";
+  font-weight: 800 !important;
 }
 
 
@@ -1076,4 +1078,27 @@ textarea:focus {
 
 .connection-status.offline {
   transform: translateY(0);
+}
+
+.empty-folded-notes {
+  border: dashed 1px var(--white-font-color);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  grid-column: 1 / -1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+
+  .heading {
+    font-size: 18px;
+  }
+
+  .description {
+    color: #aaa;
+  }
 }
