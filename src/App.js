@@ -203,5 +203,3 @@ export default function App() {
     </div>
   );
 }
-
-const maxImportFileSize = 50 * 1024 * 1024; // 5MB in bytes
