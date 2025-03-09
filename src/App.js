@@ -90,7 +90,13 @@ export default function App() {
         completed: notes.filter((note) => note.type === "completed"),
         archived: notes.filter((note) => note.type === "archived"),
       });
+      // console.log("notes", notes);
   }, [notes]);
+  
+  // useEffect(() => {
+  //   console.log("organizedNotes", organizedNotes);
+  // }, [organizedNotes]);
+
 
   useEffect(() => {
     localStorage.setItem("config", JSON.stringify(config));
@@ -147,8 +153,9 @@ export default function App() {
     
     reader.onload = (e) => {
       try {
+        console.log("e.target.result", JSON.parse(e.target.result));
         const importedNotes = JSON.parse(e.target.result);
-        
+        console.log("importedNotes", importedNotes);
         // Validate imported data structure
         if (!Array.isArray(importedNotes)) {
           throw new Error('Invalid notes format: Expected an array');
@@ -179,7 +186,8 @@ export default function App() {
 
         setNotes(prevNotes => {
           const updatedNotes = [...prevNotes];
-          
+          console.log({importedNotes,updatedNotes,prevNotes});
+          return importedNotes;
           importedNotes.forEach(importedNote => {
             const existingNoteIndex = updatedNotes.findIndex(note => note.id === importedNote.id);
             
@@ -193,7 +201,7 @@ export default function App() {
               const existingNote = updatedNotes[existingNoteIndex];
               const existingTime = new Date(existingNote.lastModifiedDateTime).getTime();
               const importedTime = new Date(importedNote.lastModifiedDateTime).getTime();
-              
+              console.log({existingTime, importedTime})
               if (importedTime > existingTime) {
                 // Imported note is newer, replace existing note
                 updatedNotes[existingNoteIndex] = importedNote;
@@ -208,11 +216,11 @@ export default function App() {
           
           // Only show alert if it hasn't been shown yet
           if (!hasAlerted) {
-            alert(`Import successful!\n\nNotes added: ${stats.added}\nNotes updated: ${stats.updated}\nNotes skipped: ${stats.skipped}`);
+            alert(`Notes imported successfully!\n\n${stats.added} new notes added\n${stats.updated} old notes updated with new data\n${stats.skipped} notes skipped because they had old data`);
             fileInputRef.current.value = '';
             hasAlerted = true;
           }
-          
+          console.log("updatedNotes", updatedNotes);
           return updatedNotes;
         });
         
@@ -251,6 +259,7 @@ export default function App() {
           setPopupValues={setPopupValues}
           handleExportNotes={handleExportNotes}
           handleImportNotes={handleImportNotes}
+          notes={notes}
         />
         {!organizedNotes.pending.length &&
         !organizedNotes.completed.length &&

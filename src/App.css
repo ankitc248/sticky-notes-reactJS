@@ -72,15 +72,45 @@ button {
   position: fixed;
   bottom: 0px;
   display: flex;
-  gap: 1rem;
+  /* gap: 1rem; */
   align-items: center;
   z-index: 5;
   border-radius: 24px 24px 0 0;
   flex-wrap: wrap;
   border-bottom: none;
+  flex-direction: column;
 }
 
-
+.options-container {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease-out;
+  width: 100%;
+}
+.options-container.active {
+  grid-template-rows: 1fr;
+  margin-bottom: 1rem;
+}
+.options-container .inner-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  /* gap: 0.5rem; */
+  width: 100%;
+  align-items: stretch;
+  justify-content: stretch;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.options-container .inner-container button {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  border-radius: 0px;
+  padding: 0.75rem 1rem;
+  border-bottom: solid 2px var(--light-black-color);
+}
 .add-note-button {
   padding: 0;
   justify-content: space-between;
@@ -699,11 +729,11 @@ button {
   padding: 0.5rem 1rem;
   font-weight: 400;
     font-family: 'Instrument Serif Italic';
-    font-size: 20px;
+    font-size: 18px;
     letter-spacing: 1px;
 }
 .not-handwritten .note-editor-title-text {
-  font-size: 18px;
+  font-size: 16px;
   font-family: inherit;
   letter-spacing: initial;
   letter-spacing: 0.5px;
@@ -740,15 +770,18 @@ button.note-editor-close:hover {
 
 button.note-editor-save {
   text-transform: lowercase;
-  font-size: 22px;
+  font-size: 16px;
   letter-spacing: 1px;
   font-weight:400;
   color: var(--yellow-color);
   font-family: "Instrument Serif Italic", serif;
   border-bottom: solid 1px var(--yellow-color);
 }
+button.note-editor-save:hover {
+  background-color: rgba(255, 255, 0, 0.2);
+}
 .not-handwritten .note-editor-save {
-  font-size: 18px;
+  font-size: 16px;
   font-family:  inherit;
   letter-spacing: initial;
 }
@@ -1041,10 +1074,6 @@ textarea:focus {
     flex: 1;
   }
 
-  .add-note-button .button-text {
-    display: none;
-  }
-
   .add-note-button .button-icon {
     border-right: none !important;
     flex: 1;
@@ -1085,6 +1114,15 @@ textarea:focus {
     padding: 0.75rem 1rem;
     font-weight: 500;
     font-size: 15px;
+  }
+  .note-editor button{
+    font-size: 20px;
+    font-weight: 900 !important;
+  }
+  .note-editor .note-editor-close{
+    font-size: 16px;
+    font-weight: 500 !important;
+    border:none;
   }
 }
 
