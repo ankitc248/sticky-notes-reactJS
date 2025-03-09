@@ -131,113 +131,6 @@ export default function App() {
     URL.revokeObjectURL(url);
   }, [notes]);
 
-  const handleImportNotes = useCallback((fileInputRef) => {
-    const file = fileInputRef.current?.files[0];
-    if (!file) return;
-    
-    // Check file type
-    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-      alert('Please select a valid JSON file');
-      fileInputRef.current.value = '';
-      return;
-    }
-
-    if (file.size > maxImportFileSize) {
-      alert('File is too large. Please select a file under 50MB');
-      fileInputRef.current.value = '';
-      return;
-    }
-
-    const reader = new FileReader();
-    let hasAlerted = false;  // Add flag to track if alert has been shown
-    
-    reader.onload = (e) => {
-      try {
-        console.log("e.target.result", JSON.parse(e.target.result));
-        const importedNotes = JSON.parse(e.target.result);
-        console.log("importedNotes", importedNotes);
-        // Validate imported data structure
-        if (!Array.isArray(importedNotes)) {
-          throw new Error('Invalid notes format: Expected an array');
-        }
-
-        // Validate each note has required fields
-        const isValidNote = (note) => {
-          return (
-            note &&
-            typeof note === 'object' &&
-            typeof note.id === 'string' &&
-            note.lastModifiedDateTime &&
-            Array.isArray(note.text) &&
-            Array.isArray(note.textStatus) &&
-            typeof note.type === 'string'
-          );
-        };
-
-        if (!importedNotes.every(isValidNote)) {
-          throw new Error('Invalid note format: One or more notes are missing required fields');
-        }
-
-        let stats = {
-          added: 0,
-          updated: 0,
-          skipped: 0
-        };
-
-        setNotes(prevNotes => {
-          const updatedNotes = [...prevNotes];
-          console.log({importedNotes,updatedNotes,prevNotes});
-          return importedNotes;
-          importedNotes.forEach(importedNote => {
-            const existingNoteIndex = updatedNotes.findIndex(note => note.id === importedNote.id);
-            
-            if (existingNoteIndex === -1) {
-              // Note doesn't exist, add it
-              updatedNotes.push(importedNote);
-              stats.added++;
-              console.log("Note added with id: ", importedNote.id);
-            } else {
-              // Note exists, check timestamp
-              const existingNote = updatedNotes[existingNoteIndex];
-              const existingTime = new Date(existingNote.lastModifiedDateTime).getTime();
-              const importedTime = new Date(importedNote.lastModifiedDateTime).getTime();
-              console.log({existingTime, importedTime})
-              if (importedTime > existingTime) {
-                // Imported note is newer, replace existing note
-                updatedNotes[existingNoteIndex] = importedNote;
-                stats.updated++;
-                console.log("Note updated with id: ", importedNote.id);
-              } else {
-                stats.skipped++;
-                console.log("Note skipped with id: ", importedNote.id);
-              }
-            }
-          });
-          
-          // Only show alert if it hasn't been shown yet
-          if (!hasAlerted) {
-            alert(`Notes imported successfully!\n\n${stats.added} new notes added\n${stats.updated} old notes updated with new data\n${stats.skipped} notes skipped because they had old data`);
-            fileInputRef.current.value = '';
-            hasAlerted = true;
-          }
-          console.log("updatedNotes", updatedNotes);
-          return updatedNotes;
-        });
-        
-      } catch (error) {
-        console.error('Error importing notes:', error);
-        alert(`Error importing notes: ${error.message}`);
-        fileInputRef.current.value = '';
-      }
-    };
-
-    reader.onerror = () => {
-      alert('Error reading file');
-    };
-
-    reader.readAsText(file);
-  }, [setNotes]);
-
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -258,7 +151,7 @@ export default function App() {
           setNotePopup={setNotePopup}
           setPopupValues={setPopupValues}
           handleExportNotes={handleExportNotes}
-          handleImportNotes={handleImportNotes}
+          setNotes = {setNotes}
           notes={notes}
         />
         {!organizedNotes.pending.length &&

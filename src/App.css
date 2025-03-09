@@ -26,7 +26,7 @@
 }
 
 .App {
-  min-height: 82dvh;
+  min-height: 88dvh;
 }
 
 .app-container {
@@ -47,11 +47,6 @@
   align-items: center;
   margin-top: 2rem;
   color: #888;
-}
-
-.empty-notes button {
-  background-color: transparent;
-
 }
 
 button {
@@ -85,7 +80,7 @@ button {
 .options-container {
   display: grid !important;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.25s ease-out;
+  transition: grid-template-rows 0.25s ease;
   width: 100%;
 }
 .options-container.active {
@@ -110,7 +105,7 @@ button {
   justify-content: space-between;
   border-radius: 0px;
   padding: 0.75rem 1rem;
-  border-bottom: solid 2px var(--light-black-color);
+  border-bottom: solid 1px var(--light-black-color);
 }
 .add-note-button {
   padding: 0;
@@ -131,6 +126,7 @@ button {
   overflow: hidden;
   color: var(--dark-black-color);
   background-color: var(--yellow-color);
+  text-transform: lowercase;
 
   .button-text {
     flex: 1;
@@ -283,9 +279,10 @@ button {
   max-width: 400px;
   font-family: "Gochi Hand", cursive;
   box-shadow: 4px -4px 4px var(--body-black-color), 0px 8px 16px rgba(0, 0, 0, 0.5);
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 12px 12px;
   height: fit-content;
   touch-action: none;
+  border:solid 1px var(--light-black-color);
   /* animation: note-initial-animation 0.25s ease-in; */
 }
 
@@ -765,6 +762,7 @@ button.note-editor-close .svg{
 }
 button.note-editor-close {
   border-bottom: solid 1px rgba(255, 0, 0, 0.75);
+  padding: 0.5rem 1rem;
 }
 button.note-editor-close:hover {
   background-color: rgba(255, 0, 0, 0.25);
@@ -773,8 +771,8 @@ button.note-editor-close:hover {
 button.note-editor-save {
   text-transform: lowercase;
   font-size: 16px;
-  letter-spacing: 1px;
-  font-weight:400;
+  letter-spacing: 1.5px;
+  font-weight:800;
   color: var(--yellow-color);
   font-family: "Instrument Serif Italic", serif;
   border-bottom: solid 1px var(--yellow-color);
@@ -1033,7 +1031,9 @@ textarea:focus {
   top: 0px;
   animation: strike 0.1s linear forwards;
 }
-
+.developer-block{
+padding: 0rem !important;
+}
 @keyframes strike {
   0% {
     width: 0%;
@@ -1154,6 +1154,9 @@ textarea:focus {
   .developer-footer {
     justify-content: center !important;
     padding-bottom: 5rem;
+  }
+  .developer-block{
+    padding-bottom: 1rem !important;
   }
 }
 
