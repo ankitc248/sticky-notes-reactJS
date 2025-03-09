@@ -90,7 +90,13 @@ export default function App() {
         completed: notes.filter((note) => note.type === "completed"),
         archived: notes.filter((note) => note.type === "archived"),
       });
+      // console.log("notes", notes);
   }, [notes]);
+  
+  // useEffect(() => {
+  //   console.log("organizedNotes", organizedNotes);
+  // }, [organizedNotes]);
+
 
   useEffect(() => {
     localStorage.setItem("config", JSON.stringify(config));
@@ -111,6 +117,20 @@ export default function App() {
     [notes]
   );
 
+  const handleExportNotes = useCallback(() => {
+    const notesData = JSON.stringify(notes, null, 2);
+    const blob = new Blob([notesData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `sticky-notes-${timestamp}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, [notes]);
+
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -130,6 +150,9 @@ export default function App() {
           setConfig={setConfig}
           setNotePopup={setNotePopup}
           setPopupValues={setPopupValues}
+          handleExportNotes={handleExportNotes}
+          setNotes = {setNotes}
+          notes={notes}
         />
         {!organizedNotes.pending.length &&
         !organizedNotes.completed.length &&

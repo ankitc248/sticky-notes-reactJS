@@ -126,7 +126,14 @@ export const NoteEditor = ({ values, onSaveClick, onCloseClick }) => {
               className="note-editor-close"
               onClick={onCloseClick}
             >
-              &#x2716;
+              
+          <span className="button-icon">
+            <img
+              src="assets/note-icons/pencil-slash.svg"
+              alt="handwritten"
+              className="icon svg"
+            />
+          </span>
             </button>
             <button
               type="button"
