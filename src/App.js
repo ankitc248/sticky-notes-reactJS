@@ -111,6 +111,125 @@ export default function App() {
     [notes]
   );
 
+  const handleExportNotes = useCallback(() => {
+    const notesData = JSON.stringify(notes, null, 2);
+    const blob = new Blob([notesData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `sticky-notes-${timestamp}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, [notes]);
+
+  const handleImportNotes = useCallback((fileInputRef) => {
+    const file = fileInputRef.current?.files[0];
+    if (!file) return;
+    
+    // Check file type
+    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+      alert('Please select a valid JSON file');
+      fileInputRef.current.value = '';
+      return;
+    }
+
+    if (file.size > maxImportFileSize) {
+      alert('File is too large. Please select a file under 50MB');
+      fileInputRef.current.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    let hasAlerted = false;  // Add flag to track if alert has been shown
+    
+    reader.onload = (e) => {
+      try {
+        const importedNotes = JSON.parse(e.target.result);
+        
+        // Validate imported data structure
+        if (!Array.isArray(importedNotes)) {
+          throw new Error('Invalid notes format: Expected an array');
+        }
+
+        // Validate each note has required fields
+        const isValidNote = (note) => {
+          return (
+            note &&
+            typeof note === 'object' &&
+            typeof note.id === 'string' &&
+            note.lastModifiedDateTime &&
+            Array.isArray(note.text) &&
+            Array.isArray(note.textStatus) &&
+            typeof note.type === 'string'
+          );
+        };
+
+        if (!importedNotes.every(isValidNote)) {
+          throw new Error('Invalid note format: One or more notes are missing required fields');
+        }
+
+        let stats = {
+          added: 0,
+          updated: 0,
+          skipped: 0
+        };
+
+        setNotes(prevNotes => {
+          const updatedNotes = [...prevNotes];
+          
+          importedNotes.forEach(importedNote => {
+            const existingNoteIndex = updatedNotes.findIndex(note => note.id === importedNote.id);
+            
+            if (existingNoteIndex === -1) {
+              // Note doesn't exist, add it
+              updatedNotes.push(importedNote);
+              stats.added++;
+              console.log("Note added with id: ", importedNote.id);
+            } else {
+              // Note exists, check timestamp
+              const existingNote = updatedNotes[existingNoteIndex];
+              const existingTime = new Date(existingNote.lastModifiedDateTime).getTime();
+              const importedTime = new Date(importedNote.lastModifiedDateTime).getTime();
+              
+              if (importedTime > existingTime) {
+                // Imported note is newer, replace existing note
+                updatedNotes[existingNoteIndex] = importedNote;
+                stats.updated++;
+                console.log("Note updated with id: ", importedNote.id);
+              } else {
+                stats.skipped++;
+                console.log("Note skipped with id: ", importedNote.id);
+              }
+            }
+          });
+          
+          // Only show alert if it hasn't been shown yet
+          if (!hasAlerted) {
+            alert(`Import successful!\n\nNotes added: ${stats.added}\nNotes updated: ${stats.updated}\nNotes skipped: ${stats.skipped}`);
+            fileInputRef.current.value = '';
+            hasAlerted = true;
+          }
+          
+          return updatedNotes;
+        });
+        
+      } catch (error) {
+        console.error('Error importing notes:', error);
+        alert(`Error importing notes: ${error.message}`);
+        fileInputRef.current.value = '';
+      }
+    };
+
+    reader.onerror = () => {
+      alert('Error reading file');
+    };
+
+    reader.readAsText(file);
+  }, [setNotes]);
+
   return (
     <div
       className={`App ${!config.handwrittenNote ? "not-handwritten" : ""} ${
@@ -130,6 +249,8 @@ export default function App() {
           setConfig={setConfig}
           setNotePopup={setNotePopup}
           setPopupValues={setPopupValues}
+          handleExportNotes={handleExportNotes}
+          handleImportNotes={handleImportNotes}
         />
         {!organizedNotes.pending.length &&
         !organizedNotes.completed.length &&
@@ -180,3 +301,5 @@ export default function App() {
     </div>
   );
 }
+
+const maxImportFileSize = 50 * 1024 * 1024; // 5MB in bytes

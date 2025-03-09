@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import { useRef } from "react";
 
 export const UniversalControls = ({
   config,
   setConfig,
   setPopupValues,
   setNotePopup,
+  handleExportNotes,
+  handleImportNotes,
 }) => {
   return (
     <div className="add-note-container">
@@ -13,9 +16,8 @@ export const UniversalControls = ({
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`handwritten-toggle ${
-            config.handwrittenNote ? "active" : ""
-          }`}
+          className={`handwritten-toggle ${config.handwrittenNote ? "active" : ""
+            }`}
           onClick={() => {
             setConfig({
               ...config,
@@ -60,6 +62,19 @@ export const UniversalControls = ({
           />
         </motion.button>
         <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleExportNotes}
+        >
+          <img
+            src="assets/note-icons/import.svg"
+            alt="stretch"
+            className="icon svg"
+          />
+          Export
+        </motion.button>
+        <ImportNotesButton handleImportNotes={handleImportNotes} />
+        <motion.button
           whileHover={{ scale: 1.025 }}
           whileTap={{ scale: 0.975 }}
           type="button"
@@ -69,8 +84,8 @@ export const UniversalControls = ({
             setNotePopup(true);
           }}
         >
-          <span className="button-icon">&#x2b;</span>
-          <span className="button-text"> Add sticky note</span>
+          {/* <span className="button-icon">&#x2b;</span> */}
+          <span className="button-text"> + Stick a note</span>
         </motion.button>
       </div>
     </div>
@@ -82,4 +97,34 @@ UniversalControls.propTypes = {
   setConfig: PropTypes.func,
   setPopupValues: PropTypes.func,
   setNotePopup: PropTypes.func,
+};
+
+
+const ImportNotesButton = ({ handleImportNotes }) => {
+  const fileInputRef = useRef(null);
+
+  return (
+    <>        
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => {
+        fileInputRef.current.click();
+      }}
+    >
+      <img
+        src="assets/note-icons/export.svg"
+        alt="stretch"
+        className="icon svg"
+      />
+      Import
+    </motion.button> <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={() => handleImportNotes(fileInputRef)}
+        accept=".json"
+      />
+    </>
+  );
 };
